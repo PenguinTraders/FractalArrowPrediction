@@ -3,7 +3,7 @@ FractalArrowPrediction
 
 MT4 + Node.js Fractal Arrow Prediction Application
 
-[Visit Penguin Traders](http://penguintraders.com/) to get help from the community
+[Visit Penguin Traders](http://penguintraders.com/groups/fractal-arrow-prediction/) to get help from the community
 
 
 #### License

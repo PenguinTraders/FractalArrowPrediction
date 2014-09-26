@@ -251,14 +251,14 @@ int start()
                a=0;
                while(zigZag_val1==0 && a<200)
                  {
-                  zigZag_val1=iCustom(NULL,0,"Custom ZigZag",13,8,5,0,a);
+                  zigZag_val1=iCustom(NULL,0,"ZigZag",13,8,5,0,a); 
                   a++;
                  }
                zigZag_pos=a-1;
 
                while(zigZag_val2==0 && a<250)
                  {
-                  zigZag_val2=iCustom(NULL,0,"Custom ZigZag",13,8,5,0,a);
+                  zigZag_val2=iCustom(NULL,0,"ZigZag",13,8,5,0,a); 
                   a++;
                  }
                int secondPos=a-1;

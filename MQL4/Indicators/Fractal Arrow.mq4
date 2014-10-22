@@ -87,6 +87,21 @@ int init()
       Alert("Your chart doesn't have enough bars");
 /* Make sure your chart has enough bars OR if you are running this EA in strategy tester, make sure your start date is less than the record_start_time */
      }
+	 
+	//Test the connection to Node server
+	string req="TEST";
+    string incoming_msg="";
+
+	 if(!INet.Open("localhost",_PORT)) return(0);
+
+	 if(!INet.Request("POST","/",incoming_msg,false,true,req,false))
+	   {
+		Print("-Err download ");
+		return(0);
+	   }
+	   
+	if(incoming_msg != "OK")
+		Alert("Connection to Node server failed. Check to see if server is running and _PORT");
 
    return(0);
 
@@ -208,6 +223,10 @@ int start()
 
       dataLoaded=true;
      }
+   else if(load_data_first && Time[20]<endTime)
+    {
+      Alert("You need to fast forward strategy tester to a time after endTime setting");
+    }
 
 //If all data is loaded then begin caculations
    else if(!load_data_first || dataLoaded)

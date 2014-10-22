@@ -114,6 +114,11 @@ if (cluster.isMaster) {
 						response.write(processed_data[reqObj.table+reqObj.start_time]);
 						//delete processed_data[reqObj.table+start_time];
 					}
+				}				
+				else if(msg == "TEST") //Client testing connection
+				{
+					console.log(msg);
+					response.write("OK");					
 				}
 				
 				else if(msg.substring(0, 3) == "REC") //Client sending a message to be stored in the database
@@ -174,6 +179,7 @@ if (cluster.isMaster) {
 				}
 				else if(msg == "REBUILD") //Client requested to reload and rebuild the sets
 				{
+					allData = {};
 					debug("http", "Rebuild command received");
 					loadBarData(workingTable, null);	
 				}
@@ -853,7 +859,7 @@ function loadBarData(table, starttime)
 			{
 				allData[table] = rows;				
 			}
-			else
+			else if(allData[table].length && allData[table].length > 0)
 			{
 				_.each(rows, function(ele){
 					allData[table] = allData[table].unshift(ele);

@@ -2,6 +2,7 @@
 #ifndef YDROL_JSON_MQH
 #define YDROL_JSON_MQH
 
+
 // (C)2014 Andrew Lord forex@NICKNAME@lordy.org.uk
 // Parse a JSON String - Adapted for mql4++ from my gawk implementation
 // ( https://code.google.com/p/oversight/source/browse/trunk/bin/catalog/json.awk )
@@ -675,7 +676,7 @@ class JSONParser {
                     while(i < _len && isDoubleDigit(_in[i])) {
                         i++;
                     }
-                    s = StringSubstr(_instr,_pos,i-_pos);
+                    string s = StringSubstr(_instr,_pos,i-_pos);
                     double d = sign * StringToDouble(s);
                     ret = (JSONValue*)new JSONNumber(d); // Create a Number as double only
                 } else {

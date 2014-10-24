@@ -2,6 +2,8 @@
 #ifndef YDROL_HASH_MQH
 #define YDROL_HASH_MQH
 
+#property strict
+
 //#property strict
 
 /*
@@ -347,7 +349,7 @@ public:
             //Copy old table.
             for(uint i = 0 ; i < oldSize ; i++ ) oldTable[i] = _buckets[i];
             // Init new entries - not sure if MQL does this anyway
-            for(i = 0 ; i<newSize ; i++ ) _buckets[i] = NULL;
+            for(int i = 0 ; i<newSize ; i++ ) _buckets[i] = NULL;
 
             // Move entries to new slots
             _hashSlots = newSize;

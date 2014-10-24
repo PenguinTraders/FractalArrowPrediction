@@ -1,8 +1,3 @@
-//+------------------------------------------------------------------+
-//|                                                      ProjectName |
-//|                                      Copyright 2012, CompanyName |
-//|                                       http://www.companyname.net |
-//+------------------------------------------------------------------+
 /*
 For help and support, please visit http://penguintraders.com
 
@@ -13,6 +8,7 @@ http://www.forexfactory.com/saver0
 #property copyright "PenguinTraders"
 #property link      "http://penguintraders.com"
 #property version   "1.00"
+#property strict
 
 #define DELIM ";" 
 
@@ -125,14 +121,18 @@ int start()
 
    int starTime= StrToTime(record_start_time);
    int endTime = StrToTime(record_end_time);
+   
+   int time, fractal, zigzag;
+   double fractal_down, fractal_up;   
+   string record, symbol1, symbol2, table, req, data;
 
 //Let's see if we should load the data first if the data isn't loaded already
 //We start recording after we have had 20 bars in the chart to make sure ZigZag leg is complete.
    if(load_data_first && Time[20]>endTime && !dataLoaded)
      {
       //Let's first tell server to clear the table
-      string req="CLEAR";
-      string data="";
+      req="CLEAR";
+      data="";
       sendMessage(req,data);
 
       int startBarPos=iBarShift(NULL,0,starTime);
@@ -169,13 +169,13 @@ int start()
             lastZigZag=zigZag_val;
            }
 
-         int time=Time[i];
-         double fractal_down=iFractals(NULL,0,MODE_UPPER,i);
-         double fractal_up=iFractals(NULL,0,MODE_LOWER,i);
+         time=Time[i];
+         fractal_down=iFractals(NULL,0,MODE_UPPER,i);
+         fractal_up=iFractals(NULL,0,MODE_LOWER,i);
          zigZag_val=iCustom(NULL,0,"ZigZag",13,8,5,0,i);
 
-         int fractal= -1;
-         int zigzag = -1;
+         fractal= -1;
+         zigzag = -1;
          //Figure out the ZigZag leg and the Fractal pattern
          if((fractal_down!=0 && fractal_down!=EMPTY_VALUE) && (fractal_up!=0 && fractal_up!=EMPTY_VALUE))
            {
@@ -202,12 +202,12 @@ int start()
            }
 
          //Construct the message string
-         string record="\"datetime\":\""+time+"\",\"bar\":\""+bar+"\",\"fractal\":\""+fractal+"\", \"zigzag\":\""+zigzag+"\"}";
+         record="\"datetime\":\""+time+"\",\"bar\":\""+bar+"\",\"fractal\":\""+fractal+"\", \"zigzag\":\""+zigzag+"\"}";
 
-         string symbol1 = StringSubstr(Symbol(), 0, 2);
-         string symbol2 = StringSubstr(Symbol(), 3, 2);
+         symbol1 = StringSubstr(Symbol(), 0, 2);
+         symbol2 = StringSubstr(Symbol(), 3, 2);
          // Publish current tick value.
-         string table=symbol1+symbol2+"_fractal_"+getPeriod();
+         table=symbol1+symbol2+"_fractal_"+getPeriod();
          req="REC:{\"table\":\""+table+"\", \"record\":{"+record+"}";
          data="";
 
@@ -537,7 +537,7 @@ int start()
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
-void sendMessage(string req,string &data)
+int sendMessage(string req,string &data)
   {
    if(!INet.Open("localhost",8040)) return(0);
 
@@ -546,6 +546,8 @@ void sendMessage(string req,string &data)
       Print("-Err download ");
       return(0);
      }
+     
+    return(0);
   }
 //<---------------------------- HELPER FUNCTIONS ARE BELOW
 
@@ -574,7 +576,7 @@ void DrawLabel(string label,string text,int x,int y,color clr,string fontName,in
 //+------------------------------------------------------------------+
 
 
-void Stamp(string objName,string text,int x,int y,double num=0)
+int Stamp(string objName,string text,int x,int y,double num=0)
   {
    string Obj="Stamp_"+objName;
    int objs=ObjectsTotal();
@@ -666,5 +668,7 @@ string getPeriod()
          break;
         }
      }
+     
+     return(0);
   }
 //+------------------------------------------------------------------+

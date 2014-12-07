@@ -77,11 +77,26 @@ int init()
    SetIndexArrow(1,225);
 
    int starTime=StrToTime(record_start_time);
+   int endTime = StrToTime(record_end_time);
+   
+   if(!IsDllsAllowed())
+   {
+      printDebug("DLLs not allowed. Please fix this setting");
+		Print("DLLs not allowed. Please fix this setting");
+   }
 
-   if(load_data_first && starTime<Time[Bars])
+   if(load_data_first && starTime < Time[Bars-1])
      {
-      Alert("Your chart doesn't have enough bars");
-/* Make sure your chart has enough bars OR if you are running this EA in strategy tester, make sure your start date is less than the record_start_time */
+      printDebug("ERROR! Start time "+record_start_time+" is less than "+TimeToString(Time[Bars-1], TIME_DATE|TIME_MINUTES));
+      Print("ERROR! Start time "+record_start_time+" is less than "+TimeToString(Time[Bars-1], TIME_DATE|TIME_MINUTES));
+    /* Make sure your chart has enough bars OR if you are running this EA in strategy tester, make sure your start date is less than the record_start_time */
+     }
+     
+      if(load_data_first && endTime > Time[0])
+     {
+      printDebug("ERROR! End time "+endTime+" is greater than "+TimeToString(Time[0], TIME_DATE|TIME_MINUTES));
+      Print("ERROR! End time "+endTime+" is greater than "+TimeToString(Time[0], TIME_DATE|TIME_MINUTES));
+    /* Make sure your chart has enough bars OR if you are running this EA in strategy tester, make sure your start date is less than the record_start_time */
      }
 	 
 	//Test the connection to Node server
@@ -92,12 +107,15 @@ int init()
 
 	 if(!INet.Request("POST","/",incoming_msg,false,true,req,false))
 	   {
-		Print("-Err download ");
+		printDebug("-Err download ");
 		return(0);
 	   }
 	   
 	if(incoming_msg != "OK")
-		Alert("Connection to Node server failed. Check to see if server is running and _PORT");
+	{
+		printDebug("Connection to Node server failed. Check to see if server is running at _PORT");
+		Print("Connection to Node server failed. Check to see if server is running at _PORT");
+   }
 
    return(0);
 
@@ -225,7 +243,7 @@ int start()
      }
    else if(load_data_first && Time[20]<endTime)
     {
-      Alert("You need to fast forward strategy tester to a time after endTime setting");
+      printDebug("You need to fast forward strategy tester to a time after endTime setting");
     }
 
 //If all data is loaded then begin caculations
@@ -445,7 +463,7 @@ int start()
 
                   if(!INet.Request("POST","/",data,false,false,req,false))
                     {
-                     Print("-Err download ");
+                     printDebug("-Err download ");
                      return(0);
                     }
 
@@ -470,7 +488,7 @@ int start()
 
          if(!INet.Request("POST","/",incoming_msg,false,true,req,false))
            {
-            Print("-Err download ");
+            printDebug("-Err download ");
             return(0);
            }
 

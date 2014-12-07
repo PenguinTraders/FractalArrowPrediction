@@ -34,7 +34,7 @@ var workers_ready = true;
 var start;
 var pattern_count = 0;
 var foundAlts = 0;
-var workingTable = 'euus_fractal_m5';
+var workingTable = 'euus_fractal_m15';
 
 var processed_data = {};
 var request_num = 0;
@@ -117,7 +117,7 @@ if (cluster.isMaster) {
 				}				
 				else if(msg == "TEST") //Client testing connection
 				{
-					console.log(msg);
+					console.log("Connection from MT4 successful");
 					response.write("OK");					
 				}
 				
@@ -145,6 +145,10 @@ if (cluster.isMaster) {
 											
 										});
 									});
+								}
+								else
+								{
+									debug("Error during insert", err);
 								}
 							}
 							connection.release();

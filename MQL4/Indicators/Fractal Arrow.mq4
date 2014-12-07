@@ -1,3 +1,8 @@
+//+------------------------------------------------------------------+
+//|                                                      ProjectName |
+//|                                      Copyright 2012, CompanyName |
+//|                                       http://www.companyname.net |
+//+------------------------------------------------------------------+
 /*
 For help and support, please visit http://penguintraders.com
 
@@ -78,44 +83,44 @@ int init()
 
    int starTime=StrToTime(record_start_time);
    int endTime = StrToTime(record_end_time);
-   
+
    if(!IsDllsAllowed())
-   {
+     {
       printDebug("DLLs not allowed. Please fix this setting");
-		Print("DLLs not allowed. Please fix this setting");
-   }
-
-   if(load_data_first && starTime < Time[Bars-1])
-     {
-      printDebug("ERROR! Start time "+record_start_time+" is less than "+TimeToString(Time[Bars-1], TIME_DATE|TIME_MINUTES));
-      Print("ERROR! Start time "+record_start_time+" is less than "+TimeToString(Time[Bars-1], TIME_DATE|TIME_MINUTES));
-    /* Make sure your chart has enough bars OR if you are running this EA in strategy tester, make sure your start date is less than the record_start_time */
+      Print("DLLs not allowed. Please fix this setting");
      }
-     
-      if(load_data_first && endTime > Time[0])
+
+   if(load_data_first && starTime<Time[Bars-1])
      {
-      printDebug("ERROR! End time "+endTime+" is greater than "+TimeToString(Time[0], TIME_DATE|TIME_MINUTES));
-      Print("ERROR! End time "+endTime+" is greater than "+TimeToString(Time[0], TIME_DATE|TIME_MINUTES));
-    /* Make sure your chart has enough bars OR if you are running this EA in strategy tester, make sure your start date is less than the record_start_time */
+      printDebug("ERROR! Start time "+record_start_time+" is less than "+TimeToString(Time[Bars-1],TIME_DATE|TIME_MINUTES));
+      Print("ERROR! Start time "+record_start_time+" is less than "+TimeToString(Time[Bars-1],TIME_DATE|TIME_MINUTES));
+/* Make sure your chart has enough bars OR if you are running this EA in strategy tester, make sure your start date is less than the record_start_time */
      }
-	 
-	//Test the connection to Node server
-	string req="TEST";
-    string incoming_msg="";
 
-	 if(!INet.Open("localhost",_PORT)) return(0);
+   if(load_data_first && endTime>Time[0])
+     {
+      printDebug("ERROR! End time "+record_end_time+" is greater than "+TimeToString(Time[0],TIME_DATE|TIME_MINUTES));
+      Print("ERROR! End time "+record_end_time+" is greater than "+TimeToString(Time[0],TIME_DATE|TIME_MINUTES));
+/* Make sure your chart has enough bars OR if you are running this EA in strategy tester, make sure your start date is less than the record_start_time */
+     }
 
-	 if(!INet.Request("POST","/",incoming_msg,false,true,req,false))
-	   {
-		printDebug("-Err download ");
-		return(0);
-	   }
-	   
-	if(incoming_msg != "OK")
-	{
-		printDebug("Connection to Node server failed. Check to see if server is running at _PORT");
-		Print("Connection to Node server failed. Check to see if server is running at _PORT");
-   }
+//Test the connection to Node server
+   string req="TEST";
+   string incoming_msg="";
+
+   if(!INet.Open("localhost",_PORT)) return(0);
+
+   if(!INet.Request("POST","/",incoming_msg,false,true,req,false))
+     {
+      printDebug("-Err download ");
+      return(0);
+     }
+
+   if(incoming_msg!="OK")
+     {
+      printDebug("Connection to Node server failed. Check to see if server is running at _PORT");
+      Print("Connection to Node server failed. Check to see if server is running at _PORT");
+     }
 
    return(0);
 
@@ -139,10 +144,10 @@ int start()
 
    int starTime= StrToTime(record_start_time);
    int endTime = StrToTime(record_end_time);
-   
-   int time, fractal, zigzag;
-   double fractal_down, fractal_up;   
-   string record, symbol1, symbol2, table, req, data;
+
+   int time,fractal,zigzag;
+   double fractal_down,fractal_up;
+   string record,symbol1,symbol2,table,req,data;
 
 //Let's see if we should load the data first if the data isn't loaded already
 //We start recording after we have had 20 bars in the chart to make sure ZigZag leg is complete.
@@ -242,9 +247,9 @@ int start()
       dataLoaded=true;
      }
    else if(load_data_first && Time[20]<endTime)
-    {
+     {
       printDebug("You need to fast forward strategy tester to a time after endTime setting");
-    }
+     }
 
 //If all data is loaded then begin caculations
    else if(!load_data_first || dataLoaded)
@@ -277,7 +282,6 @@ int start()
             int startPos=0;
             int BarLength=0;
 
-
             double zigZag_val1 = 0;
             double zigZag_val2 = 0;
             double fractal_val = 0;
@@ -288,14 +292,14 @@ int start()
                a=0;
                while(zigZag_val1==0 && a<200)
                  {
-                  zigZag_val1=iCustom(NULL,0,"ZigZag",13,8,5,0,a); 
+                  zigZag_val1=iCustom(NULL,0,"ZigZag",13,8,5,0,a);
                   a++;
                  }
                zigZag_pos=a-1;
 
                while(zigZag_val2==0 && a<250)
                  {
-                  zigZag_val2=iCustom(NULL,0,"ZigZag",13,8,5,0,a); 
+                  zigZag_val2=iCustom(NULL,0,"ZigZag",13,8,5,0,a);
                   a++;
                  }
                int secondPos=a-1;
@@ -564,8 +568,8 @@ int sendMessage(string req,string &data)
       Print("-Err download ");
       return(0);
      }
-     
-    return(0);
+
+   return(0);
   }
 //<---------------------------- HELPER FUNCTIONS ARE BELOW
 
@@ -686,7 +690,7 @@ string getPeriod()
          break;
         }
      }
-     
-     return(0);
+
+   return(0);
   }
 //+------------------------------------------------------------------+

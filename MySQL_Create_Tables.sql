@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS `barpattern2` (
 -- Table structure for table `euus_fractal_m5`
 --
 
-DROP TABLE IF EXISTS `euus_fractal_m5`;
-CREATE TABLE IF NOT EXISTS `euus_fractal_m5` (
+DROP TABLE IF EXISTS `euus_fractal_m15`;
+CREATE TABLE IF NOT EXISTS `euus_fractal_m15` (
   `datetime` int(11) NOT NULL,
   `bar` int(1) NOT NULL,
   `fractal` int(1) NOT NULL,

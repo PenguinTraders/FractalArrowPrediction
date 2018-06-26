@@ -11,7 +11,8 @@ var _ = require("underscore");
 var async = require("async");
 var moment = require("moment");
 var prettyjson = require("prettyjson");
-var http = require("http");
+var debug = require('debug')('http')
+,http = require('http') 
 
 var _HTTP_PORT = 8040;
 
